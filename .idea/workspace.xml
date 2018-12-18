@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cdd9dd5-31b8-4f34-b815-9bae907300c1" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,10 +18,22 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="149" column="4" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="4" />
+            <state relative-caret-position="515">
+              <caret line="343" column="1" selection-start-line="343" selection-start-column="1" selection-end-line="343" selection-end-column="1" />
               <folding>
-                <element signature="n#!!block;n#getBetUrl#0" />
+                <element signature="e#3348#3535#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Temp/scp07871/var/www/html/betspeech2/test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="314">
+              <caret line="25" column="18" lean-forward="true" selection-end-line="343" selection-end-column="1" />
+              <folding>
+                <element signature="e#3164#3351#0" />
               </folding>
             </state>
           </provider>
@@ -28,8 +42,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="25" lean-forward="true" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+            <state relative-caret-position="252">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -48,12 +62,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>innerhtml</find>
-      <find>speechsd</find>
-      <find>izer = undefined;</find>
-      <find>confirmation</find>
-      <find>recognizer</find>
-      <find>close</find>
       <find>parse</find>
       <find>message</find>
       <find>findAmount</find>
@@ -61,7 +69,6 @@
       <find>initiallist</find>
       <find>responseMessages</find>
       <find>show</find>
-      <find>spinner</find>
       <find>phraseDiv</find>
       <find>initialListen</find>
       <find>responsemessages</find>
@@ -69,7 +76,26 @@
       <find>amount</find>
       <find>indexof</find>
       <find>get</find>
+      <find>somet</find>
+      <find>spinner</find>
+      <find>welc</find>
+      <find>.match</find>
+      <find>tolowercase</find>
+      <find>confirmBet</find>
+      <find>validateResponse</find>
+      <find>betslip.err</find>
+      <find>99</find>
+      <find>recognizeCorrection</find>
+      <find>parseCorrectionResponse</find>
+      <find>processInput</find>
+      <find>sayAgain</find>
+      <find>conso</find>
+      <find>processin</find>
+      <find>null</find>
     </findStrings>
+    <replaceStrings>
+      <replace>parseCorrectionResponse</replace>
+    </replaceStrings>
   </component>
   <component name="GOROOT" path="C:\Go" />
   <component name="Git.Settings">
@@ -79,6 +105,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$USER_HOME$/AppData/Local/Temp/scp07871/var/www/html/betspeech2/test.js" />
         <option value="$PROJECT_DIR$/test.js" />
       </list>
     </option>
@@ -181,10 +208,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="149" column="4" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="4" />
+        <state relative-caret-position="174">
+          <caret line="148" column="24" selection-start-line="148" selection-start-column="19" selection-end-line="148" selection-end-column="24" />
           <folding>
-            <element signature="n#!!block;n#getBetUrl#0" />
+            <element signature="e#3348#3535#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/scp07871/var/www/html/betspeech2/test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="25" column="18" lean-forward="true" selection-end-line="343" selection-end-column="1" />
+          <folding>
+            <element signature="e#3164#3351#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="343" column="1" selection-start-line="343" selection-start-column="1" selection-end-line="343" selection-end-column="1" />
+          <folding>
+            <element signature="e#3348#3535#0" />
           </folding>
         </state>
       </provider>
