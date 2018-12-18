@@ -74,14 +74,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 var err = validateResponse(parsedResult);
                 window.console.log("err:" + err);
 
-                phraseDiv.innerHTML += " /n ** return: " + err;
+                //phraseDiv.innerHTML += " /n ** return: " + err;
 
                 if (err == 0) {
-                    phraseDiv.innerHTML += "/n Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team;
+                    var confirmstr = "Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team;
+                    responsiveVoice.speak(confirmstr, "UK English Female");
                     var url = getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount)
-                    window.location.replace(url)
+                    //window.location.replace(url)
                 } else {
-                    phraseDiv.innerHTML += "/n" + responseMessages[err];
+                    responsiveVoice.speak(responseMessages[err], "UK English Female"); ;
                 }
 
             },
