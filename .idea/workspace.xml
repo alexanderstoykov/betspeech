@@ -16,8 +16,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="19" column="70" selection-start-line="19" selection-start-column="70" selection-end-line="19" selection-end-column="70" />
+            <state relative-caret-position="246">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
               <folding>
                 <element signature="n#!!block;n#getBetUrl#0" />
               </folding>
@@ -52,7 +52,6 @@
       <find>speechsd</find>
       <find>izer = undefined;</find>
       <find>confirmation</find>
-      <find>phraseDiv</find>
       <find>recognizer</find>
       <find>close</find>
       <find>parse</find>
@@ -63,6 +62,10 @@
       <find>responseMessages</find>
       <find>show</find>
       <find>spinner</find>
+      <find>phraseDiv</find>
+      <find>initialListen</find>
+      <find>responsemessages</find>
+      <find>responsemessage</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="C:\Go" />
@@ -175,8 +178,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="19" column="70" selection-start-line="19" selection-start-column="70" selection-end-line="19" selection-end-column="70" />
+        <state relative-caret-position="246">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
           <folding>
             <element signature="n#!!block;n#getBetUrl#0" />
           </folding>

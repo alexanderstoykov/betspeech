@@ -16,17 +16,17 @@ var betslip = {
     }
 };
 
-document.addEventListener("DOMContentLoaded", function() {
-    startRecognizeOnceAsyncButton = document.getElementById("start_mic");
-    subscriptionKey = '2251de4451724f73b7fbe7730d151131';
-    regionKey = 'westeurope';
-
 var responseMessages = {
     0: "all good",
     1: "sorry, i couldnt understand the team you would like to bet on, please repeat",
     2: "how much would you like to bet",
     99: "Sorry, could not understand. try again."
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+    startRecognizeOnceAsyncButton = document.getElementById("start_mic");
+    subscriptionKey = '2251de4451724f73b7fbe7730d151131';
+    regionKey = 'westeurope';
 
     responsiveVoice.setDefaultVoice("UK English Female");
     responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
@@ -98,7 +98,6 @@ function initialListen(){
 function processInput(result){
     betslip.bet = parseInput(result.text);
     var err = validateResponse(betslip.bet);
-    window.console.log("err:" + err);
     hideLoader();
     if (err == 0) {
         confirmBet()
