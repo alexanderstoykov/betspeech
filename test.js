@@ -82,8 +82,8 @@
       SpeechSDK = window.SpeechSDK;
       startRecognizeOnceAsyncButton.disabled = false;
 
-      document.getElementById('content').style.display = 'block';
-      document.getElementById('warning').style.display = 'none';
+     // document.getElementById('content').style.display = 'block';
+      //document.getElementById('warning').style.display = 'none';
 
       // in case we have a function for getting an authorization token, call it.
       if (typeof RequestAuthorizationToken === "function") {
