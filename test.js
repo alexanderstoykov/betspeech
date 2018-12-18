@@ -17,10 +17,9 @@ var betslip = {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    startRecognizeOnceAsyncButton = document.getElementById("startRecognizeOnceAsyncButton");
+    startRecognizeOnceAsyncButton = document.getElementById("start_mic");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
     regionKey = 'westeurope';
-    phraseDiv = document.getElementById("phraseDiv");
 
 var responseMessages = {
     0: "all good",
