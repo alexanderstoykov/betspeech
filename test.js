@@ -1,18 +1,15 @@
 // status fields and start button in UI
-var phraseDiv;
 var startRecognizeOnceAsyncButton;
-
 // subscription key and region key for speech services.
 var subscriptionKey, regionKey;
 var authorizationToken;
 var SpeechSDK;
 var recognizer;
 
-document.addEventListener("DOMContentLoaded", function() {
-    startRecognizeOnceAsyncButton = document.getElementById("startRecognizeOnceAsyncButton");
+document.addEventListener("DOMContentLoaded", function () {
+    startRecognizeOnceAsyncButton = document.getElementById("start_mic");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
     regionKey = 'westeurope';
-    phraseDiv = document.getElementById("phraseDiv");
 
     var responseMessages = {
         0: "all good",
@@ -21,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
         99: "Sorry, could not understand. try again."
     };
 
-    startRecognizeOnceAsyncButton.addEventListener("click", function() {
+    //LISTENER -- START
+    startRecognizeOnceAsyncButton.addEventListener("click", function () {
         startRecognizeOnceAsyncButton.disabled = true;
-        phraseDiv.innerHTML = "";
 
         // if we got an authorization token, use the token. Otherwise use the provided subscription key
         var speechConfig;
@@ -40,44 +37,48 @@ document.addEventListener("DOMContentLoaded", function() {
         speechConfig.speechRecognitionLanguage = "en-US";
         var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+        showLoader();
 
         recognizer.recognizeOnceAsync(
-            function(result) {
-                startRecognizeOnceAsyncButton.disabled = false;
-                phraseDiv.innerHTML += result.text;
-                window.console.log(result);
-
-
-
-
-                recognizer.close();
-                recognizer = undefined;
-
+            function (result) {
                 var parsedResult = parseInput(result.text);
                 window.console.log("parsedResult: ", parsedResult);
                 var err = validateResponse(parsedResult);
                 window.console.log("err:" + err);
 
-                phraseDiv.innerHTML += " /n ** return: " + err;
+                hideLoader();
 
                 if (err == 0) {
-                    phraseDiv.innerHTML += "/n Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team;
-                    var url = getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount)
-                    window.location.replace(url)
+                    responsiveVoice.speak("Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team+"?", 'UK English Female', {
+                        onend: function () {
+                            recognizer.recognizeOnceAsync(recognizeConfirmation, function (err) {
+                                alert(err+"aaa")
+                            })
+                        }
+                    })
                 } else {
-                    phraseDiv.innerHTML += "/n" + responseMessages[err];
+                    responsiveVoice.speak(responseMessages[err], 'UK English Female', {
+                        onstart: function () {
+                            hideLoader();
+                        },
+                        onend: function () {
+                            showLoader();
+                            recognizer.recognizeOnceAsync(recognizeCorrection, function (err) {
+                                alert(err+"bbb")
+                            })
+                        }
+                    })
                 }
-
             },
-            function(err) {
+            function (err) {
+                hideLoader()
                 startRecognizeOnceAsyncButton.disabled = false;
-                phraseDiv.innerHTML += err;
-                window.console.log(err);
-
+                alert(err)
                 recognizer.close();
                 recognizer = undefined;
             });
     });
+    //LISTENER -- END 
 
     if (!!window.SpeechSDK) {
         SpeechSDK = window.SpeechSDK;
@@ -93,12 +94,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
 function findAmount(words) {
     var BreakException = {};
     var amount = '';
     try {
-        words.forEach(function(word, i) {
+        words.forEach(function (word, i) {
             p = parseInt(word)
             if (!isNaN(p) && p > 0) {
                 amount = p
@@ -121,7 +121,7 @@ function getTeam(words) {
     var team = "";
 
     try {
-        words.forEach(function(word, i) {
+        words.forEach(function (word, i) {
             if (word == "on") {
                 on = true;
             } else if (word[0] === word[0].toUpperCase() && on && !isDayName(word)) {
@@ -151,6 +151,24 @@ function getCondition(text) {
     return condition;
 }
 
+function recognizeConfirmation(result){
+    var response = result.text.toLowerCase();
+    if (response.indexOf("yes") !== -1 ||
+        response.indexOf("i do") !== -1 ||
+        response.indexOf("i am") !== -1) {
+        responsiveVoice.speak("So you want , huh?", "UK English Female");
+    } else if (response.indexOf("no") !== -1 ||
+        response.indexOf("i don't") !== -1 ||
+        response.indexOf("i am not") !== -1){
+        responsiveVoice.speak("NO no no no no", "UK English Female");
+    } else {
+        responsiveVoice.speak("I am sorry, I didn't understand", "UK English Female");
+    }
+}
+
+function recognizeCorrection(result){
+    console.log(result.text);
+}
 
 function parseInput(text) {
     if (text[text.length - 1] === ".")
@@ -180,7 +198,8 @@ function getTeamByMapping(team) {
         return "Man City";
     } else {
         return team;
-    };
+    }
+    ;
 };
 
 function getBetUrl(team, condition, amount) {
@@ -226,8 +245,17 @@ function getBetUrl(team, condition, amount) {
             }
             break;
         }
-    };
+    }
+    ;
 
     return_url = return_url.concat("&Stake=", amount)
     return return_url;
+}
+
+function showLoader() {
+    document.getElementById("spinner").style.display = 'block';
+}
+
+function hideLoader() {
+    document.getElementById("spinner").style.display = 'none';
 }
