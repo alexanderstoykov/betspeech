@@ -54,24 +54,20 @@
           recognizer = undefined;
           
           var parsedResult = parseInput(result.text);
-          
-          window.console.log(parsedResult);
-          
+          window.console.log("parsedResult: ", parsedResult);
           var err = validateResponse(parsedResult);
-          
           window.console.log("err:" + err);
           
-          phraseDiv.innerHTML += " <br/>** return: " + err;
+          phraseDiv.innerHTML += " /n ** return: " + err;
 
           if(err == 0){
-              //todo: confirm bet
-              phraseDiv.innerHTML += "<br/>Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team; 
+            phraseDiv.innerHTML += "/n Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team; 
+            var url = getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount)
+            window.location.replace(url)    
           } else {
-            phraseDiv.innerHTML += "<br/>"+responseMessages[err];
+            phraseDiv.innerHTML += "/n"+responseMessages[err];
           }
-		 
-		  window.console.log(getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount));
-          
+
         },
         function (err) {
           startRecognizeOnceAsyncButton.disabled = false;
