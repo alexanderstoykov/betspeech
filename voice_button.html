@@ -1,0 +1,31 @@
+<html>
+<header>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</header>
+<body>
+	<div class="main_div"> 
+		
+		<button id="rec_btn_id" class="fa fa-microphone rec_btn_inactive">
+		
+		<span class="rec_btn_text">VOICE BETTING</span>
+		
+	</button>		
+
+	</div>
+<body>
+<script>
+
+var rec_btn = document.getElementById("rec_btn_id"); 
+rec_btn.onclick = function() {
+	if (rec_btn.className == "fa fa-microphone rec_btn_inactive"){
+		rec_btn.className = "fa fa-stop-circle rec_btn_active";
+		
+	} else {
+		rec_btn.className = "fa fa-microphone rec_btn_inactive";
+	}
+
+};
+
+</script>
+</html>

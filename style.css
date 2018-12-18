@@ -1,0 +1,36 @@
+#rec_btn_id {
+	width: 210px;
+    height: 70px;
+	text-align: right;
+	border-radius: 5px;
+	outline: none;
+	border-style: none;
+	padding-left: 5px;
+}
+
+.rec_btn_inactive:before, .rec_btn_active:before {
+	font-size:50px;
+	vertical-align: middle;
+	color:green;
+	text-align: left;
+	
+}
+
+.rec_btn_inactive:before{
+	padding-right:8px;
+}
+
+.rec_btn_active:before {
+	color:red;	
+}
+
+.rec_btn_text{
+	font-family: Tahoma,Arial,Helvetica,sans-serif;
+	padding-right: 10px;
+	padding-left: 15px;
+}
+
+.main_div {
+	padding-left: 70px;	
+}
+
