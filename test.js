@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function() {
         speechConfig.speechRecognitionLanguage = "en-US";
         var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
-        showLoader();
         initialListen();
     };
     //LISTENER -- END
@@ -91,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function initialListen(){
+    showLoader();
     recognizer.recognizeOnceAsync(processInput,
         function (err) {
             hideLoader()
@@ -102,7 +102,7 @@ function initialListen(){
 }
 
 function processInput(result){
-    console.log('Process input ', result.text);
+    hideLoader();
     parsed = parseInput(result.text)
     if (parsed.team != "") {
         console.log(1);
@@ -114,9 +114,9 @@ function processInput(result){
     if (parsed.condition != "") {
         betslip.bet.condition = parsed.condition
     }
-
+    console.log(parsed, betslip);
     var err = validateResponse(betslip.bet);
-    hideLoader();
+
     if (err == 0) {
         confirmBet()
     } else {
@@ -125,12 +125,10 @@ function processInput(result){
 }
 
 function sayAgain(err){
+    hideLoader();
     console.log('Say again');
     betslip.error = err
     responsiveVoice.speak(responseMessages[err], 'UK English Female', {
-        onstart: function () {
-            hideLoader();
-        },
         onend: function () {
             showLoader();
             recognizer.recognizeOnceAsync(parseCorrectionResponse, function (err) {
@@ -144,6 +142,7 @@ function confirmBet(){
     betslip.error = 0
     responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on team " + betslip.bet.team+"?", 'UK English Female', {
         onend: function () {
+            showLoader();
             recognizer.recognizeOnceAsync(recognizeConfirmation, function (err) {
                 alert(err+"aaa")
             })
@@ -187,18 +186,19 @@ function getTeam(words) {
     var team = "";
 
     try {
-        words.forEach(function (word, i) {
-            if (word == "on") {
-                on = true;
-            } else if (word[0] === word[0].toUpperCase() && on && !isDayName(word)) {
-                team = word
-                if (words[i + 1] != undefined && words[i + 1][0] === words[i + 1][0].toUpperCase()) {
-                    team += " " + words[i + 1];
+        if (words.length > 0 && words[0] != "") {
+            words.forEach(function (word, i) {
+                if (word == "on") {
+                    on = true;
+                } else if (word[0] === word[0].toUpperCase() && on && !isDayName(word)) {
+                    team = word
+                    if (words[i + 1] != undefined && words[i + 1][0] === words[i + 1][0].toUpperCase()) {
+                        team += " " + words[i + 1];
+                    }
+                    throw BreakException
                 }
-                throw BreakException
-            }
-
-        });
+            });
+        }
     } catch (e) {
         if (e !== BreakException) throw e;
     }
@@ -218,6 +218,7 @@ function getCondition(text) {
 }
 
 function recognizeConfirmation(result){
+    hideLoader();
     var response = '';
     if(typeof result.text != 'undefined') {
         response = result.text.toLowerCase();
@@ -238,7 +239,11 @@ function recognizeConfirmation(result){
 }
 
 function parseCorrectionResponse(result) {
-    response = result.text.toLowerCase();
+    hideLoader();
+    var response = '';
+    if(typeof result.text != 'undefined') {
+        response = result.text.toLowerCase();
+    }
 
     if (betslip.error == 1) {
         betslip.bet.team = response
@@ -256,13 +261,16 @@ function parseCorrectionResponse(result) {
 }
 
 function parseInput(text) {
-    if (text[text.length - 1] === ".")
-        text = text.slice(0, -1);
-    var splitted = text.split(" ");
-    response = {}
-    response.amount = findAmount(splitted);
-    response.team = getTeam(splitted);
-    response.condition = getCondition(text);
+    response = {amount:"",team:"",condition:""}
+    if (typeof text != 'undefined') {
+        if (text[text.length - 1] === ".")
+            text = text.slice(0, -1);
+        var splitted = text.split(" ");
+
+        response.amount = findAmount(splitted);
+        response.team = getTeam(splitted);
+        response.condition = getCondition(text);
+    }
     return response;
 };
 
