@@ -65,7 +65,7 @@
             phraseDiv.innerHTML += " ** return: " + err;
           }
 		 
-		  window.console.log(getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount);
+		  window.console.log(getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount));
           
         },
         function (err) {
