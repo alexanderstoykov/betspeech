@@ -1,6 +1,6 @@
 function findAmount(words) {
     var BreakException = {};
-    var amount
+    var amount = 1
     try {
         words.forEach(function(word, i) {
             p = parseInt(word)
