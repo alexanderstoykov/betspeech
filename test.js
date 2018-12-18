@@ -21,7 +21,23 @@ document.addEventListener("DOMContentLoaded", function() {
         99: "Sorry, could not understand. try again."
     };
 
-    startRecognizeOnceAsyncButton.addEventListener("click", function() {
+    startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
+    startRecognizeOnceAsyncButton.addEventListener("tap", startlisten);
+
+    if (!!window.SpeechSDK) {
+        SpeechSDK = window.SpeechSDK;
+        startRecognizeOnceAsyncButton.disabled = false;
+
+        // document.getElementById('content').style.display = 'block';
+        //document.getElementById('warning').style.display = 'none';
+
+        // in case we have a function for getting an authorization token, call it.
+        if (typeof RequestAuthorizationToken === "function") {
+            RequestAuthorizationToken();
+        }
+    }
+
+    function startlisten() {
         startRecognizeOnceAsyncButton.disabled = true;
         phraseDiv.innerHTML = "";
 
@@ -77,19 +93,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 recognizer.close();
                 recognizer = undefined;
             });
-    });
-
-    if (!!window.SpeechSDK) {
-        SpeechSDK = window.SpeechSDK;
-        startRecognizeOnceAsyncButton.disabled = false;
-
-        // document.getElementById('content').style.display = 'block';
-        //document.getElementById('warning').style.display = 'none';
-
-        // in case we have a function for getting an authorization token, call it.
-        if (typeof RequestAuthorizationToken === "function") {
-            RequestAuthorizationToken();
-        }
     }
 });
 
