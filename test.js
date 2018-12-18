@@ -16,6 +16,12 @@ var betslip = {
     }
 };
 
+document.addEventListener("DOMContentLoaded", function() {
+    startRecognizeOnceAsyncButton = document.getElementById("startRecognizeOnceAsyncButton");
+    subscriptionKey = '2251de4451724f73b7fbe7730d151131';
+    regionKey = 'westeurope';
+    phraseDiv = document.getElementById("phraseDiv");
+
 var responseMessages = {
     0: "all good",
     1: "sorry, i couldnt understand the team you would like to bet on, please repeat",
@@ -23,13 +29,26 @@ var responseMessages = {
     99: "Sorry, could not understand. try again."
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-    startRecognizeOnceAsyncButton = document.getElementById("start_mic");
-    subscriptionKey = '2251de4451724f73b7fbe7730d151131';
-    regionKey = 'westeurope';
+    responsiveVoice.setDefaultVoice("UK English Female");
+    responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
 
-    //LISTENER -- START
-    startRecognizeOnceAsyncButton.addEventListener("click", function () {
+    startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
+    startRecognizeOnceAsyncButton.addEventListener("tap", startlisten);
+
+    if (!!window.SpeechSDK) {
+        SpeechSDK = window.SpeechSDK;
+        startRecognizeOnceAsyncButton.disabled = false;
+
+        // document.getElementById('content').style.display = 'block';
+        //document.getElementById('warning').style.display = 'none';
+
+        // in case we have a function for getting an authorization token, call it.
+        if (typeof RequestAuthorizationToken === "function") {
+            RequestAuthorizationToken();
+        }
+    }
+
+    function startlisten() {
         startRecognizeOnceAsyncButton.disabled = true;
 
         // if we got an authorization token, use the token. Otherwise use the provided subscription key
@@ -50,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showLoader();
         initialListen();
     });
-    //LISTENER -- END 
+    //LISTENER -- END
 
     if (!!window.SpeechSDK) {
         SpeechSDK = window.SpeechSDK;
@@ -236,8 +255,7 @@ function getTeamByMapping(team) {
         return "Man City";
     } else {
         return team;
-    }
-    ;
+    };
 };
 
 function getBetUrl(team, condition, amount) {
@@ -283,8 +301,7 @@ function getBetUrl(team, condition, amount) {
             }
             break;
         }
-    }
-    ;
+    };
 
     return_url = return_url.concat("&Stake=", amount)
     return return_url;
