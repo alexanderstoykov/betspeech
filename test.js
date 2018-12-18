@@ -8,6 +8,12 @@ var authorizationToken;
 var SpeechSDK;
 var recognizer;
 
+var betslip = {
+    correspondences: 0,
+    ready: false,
+    bets:[]
+  };
+
 document.addEventListener("DOMContentLoaded", function() {
     startRecognizeOnceAsyncButton = document.getElementById("startRecognizeOnceAsyncButton");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
@@ -20,6 +26,9 @@ document.addEventListener("DOMContentLoaded", function() {
         2: "how much would you like to bet",
         99: "Sorry, could not understand. try again."
     };
+
+    initTextTospeech();
+    responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
 
     startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
     startRecognizeOnceAsyncButton.addEventListener("tap", startlisten);
@@ -78,11 +87,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 if (err == 0) {
                     var confirmstr = "Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team;
-                    responsiveVoice.speak(confirmstr, "UK English Female");
+                    responsiveVoice.speak(confirmstr);
                     var url = getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount)
                     //window.location.replace(url)
                 } else {
-                    responsiveVoice.speak(responseMessages[err], "UK English Female"); ;
+                    responsiveVoice.speak(responseMessages[err]); ;
                 }
 
             },
@@ -231,6 +240,11 @@ function getBetUrl(team, condition, amount) {
             break;
         }
     };
+
+    funtion initTextTospeech(){
+      responsiveVoice.setDefaultVoice("UK English Female");
+
+    }
 
     return_url = return_url.concat("&Stake=", amount)
     return return_url;
