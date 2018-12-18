@@ -55,14 +55,19 @@
           
           var parsedResult = parseInput(result.text);
           
-          
+          window.console.log(parsedResult);
           
           var err = validateResponse(parsedResult);
           
           window.console.log("err:" + err);
           
+          phraseDiv.innerHTML += " <br/>** return: " + err;
+
           if(err == 0){
-            phraseDiv.innerHTML += " ** return: " + err;
+              //todo: confirm bet
+              phraseDiv.innerHTML += "<br/>Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team; 
+          } else {
+            phraseDiv.innerHTML += "<br/>"+responseMessages[err];
           }
 		 
 		  window.console.log(getBetUrl(parsedResult.team, parsedResult.condition, parsedResult.amount));
