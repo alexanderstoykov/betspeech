@@ -146,7 +146,9 @@ function findAmount(words) {
     } catch (e) {
         if (e !== BreakException) throw e;
     }
-    return amount
+    var matches = 'someth48'.match( /\d+/g )
+    
+    return matches[0]
 }
 
 function isDayName(name) {

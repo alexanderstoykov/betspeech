@@ -16,8 +16,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+            <state relative-caret-position="345">
+              <caret line="149" column="4" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="4" />
               <folding>
                 <element signature="n#!!block;n#getBetUrl#0" />
               </folding>
@@ -66,6 +66,9 @@
       <find>initialListen</find>
       <find>responsemessages</find>
       <find>responsemessage</find>
+      <find>amount</find>
+      <find>indexof</find>
+      <find>get</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="C:\Go" />
@@ -178,8 +181,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        <state relative-caret-position="345">
+          <caret line="149" column="4" lean-forward="true" selection-start-line="149" selection-start-column="4" selection-end-line="149" selection-end-column="4" />
           <folding>
             <element signature="n#!!block;n#getBetUrl#0" />
           </folding>
