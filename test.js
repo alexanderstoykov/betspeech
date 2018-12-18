@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
         99: "Sorry, could not understand. try again."
     };
 
-    initTextTospeech();
+    responsiveVoice.setDefaultVoice("UK English Female");
     responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
 
     startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
@@ -241,10 +241,6 @@ function getBetUrl(team, condition, amount) {
         }
     };
 
-    function initTextTospeech(){
-      responsiveVoice.setDefaultVoice("UK English Female");
-
-    }
 
     return_url = return_url.concat("&Stake=", amount)
     return return_url;
