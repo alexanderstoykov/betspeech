@@ -6,17 +6,27 @@ var authorizationToken;
 var SpeechSDK;
 var recognizer;
 
+var betslip = {
+    ready: false,
+    error: 0,
+    bet: {
+        team: null,
+        amount: null,
+        condition: null
+    }
+};
+
+var responseMessages = {
+    0: "all good",
+    1: "sorry, i couldnt understand the team you would like to bet on, please repeat",
+    2: "how much would you like to bet",
+    99: "Sorry, could not understand. try again."
+};
+
 document.addEventListener("DOMContentLoaded", function () {
     startRecognizeOnceAsyncButton = document.getElementById("start_mic");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
     regionKey = 'westeurope';
-
-    var responseMessages = {
-        0: "all good",
-        1: "sorry, i couldnt understand the team you would like to bet on, please repeat",
-        2: "how much would you like to bet",
-        99: "Sorry, could not understand. try again."
-    };
 
     //LISTENER -- START
     startRecognizeOnceAsyncButton.addEventListener("click", function () {
@@ -38,45 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
         showLoader();
-
-        recognizer.recognizeOnceAsync(
-            function (result) {
-                var parsedResult = parseInput(result.text);
-                window.console.log("parsedResult: ", parsedResult);
-                var err = validateResponse(parsedResult);
-                window.console.log("err:" + err);
-
-                hideLoader();
-
-                if (err == 0) {
-                    responsiveVoice.speak("Are you sure you want to bet " + parsedResult.amount + " on team " + parsedResult.team+"?", 'UK English Female', {
-                        onend: function () {
-                            recognizer.recognizeOnceAsync(recognizeConfirmation, function (err) {
-                                alert(err+"aaa")
-                            })
-                        }
-                    })
-                } else {
-                    responsiveVoice.speak(responseMessages[err], 'UK English Female', {
-                        onstart: function () {
-                            hideLoader();
-                        },
-                        onend: function () {
-                            showLoader();
-                            recognizer.recognizeOnceAsync(recognizeCorrection, function (err) {
-                                alert(err+"bbb")
-                            })
-                        }
-                    })
-                }
-            },
-            function (err) {
-                hideLoader()
-                startRecognizeOnceAsyncButton.disabled = false;
-                alert(err)
-                recognizer.close();
-                recognizer = undefined;
-            });
+        initialListen();
     });
     //LISTENER -- END 
 
@@ -93,6 +65,55 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
+
+function initialListen(){
+    recognizer.recognizeOnceAsync(processInput,
+        function (err) {
+            hideLoader()
+            startRecognizeOnceAsyncButton.disabled = false;
+            alert(err)
+            recognizer.close();
+            recognizer = undefined;
+        });
+}
+
+function processInput(result){
+    betslip.bet = parseInput(result.text);
+    var err = validateResponse(betslip.bet);
+    window.console.log("err:" + err);
+    hideLoader();
+    if (err == 0) {
+        confirmBet()
+    } else {
+        sayAgain(err)
+    }
+}
+
+function sayAgain(err){
+    betslip.error = err
+    responsiveVoice.speak(responseMessages[err], 'UK English Female', {
+        onstart: function () {
+            hideLoader();
+        },
+        onend: function () {
+            showLoader();
+            recognizer.recognizeOnceAsync(recognizeCorrection, function (err) {
+                alert(err+"bbb")
+            })
+        }
+    })
+}
+
+function confirmBet(){
+    betslip.error = 0
+    responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on team " + betslip.bet.team+"?", 'UK English Female', {
+        onend: function () {
+            recognizer.recognizeOnceAsync(recognizeConfirmation, function (err) {
+                alert(err+"aaa")
+            })
+        }
+    })
+}
 
 function findAmount(words) {
     var BreakException = {};
@@ -156,18 +177,35 @@ function recognizeConfirmation(result){
     if (response.indexOf("yes") !== -1 ||
         response.indexOf("i do") !== -1 ||
         response.indexOf("i am") !== -1) {
-        responsiveVoice.speak("So you want , huh?", "UK English Female");
+        responsiveVoice.speak("So you want , huh? I am now gonna place the bet for you!", "UK English Female");
     } else if (response.indexOf("no") !== -1 ||
         response.indexOf("i don't") !== -1 ||
         response.indexOf("i am not") !== -1){
-        responsiveVoice.speak("NO no no no no", "UK English Female");
+        responsiveVoice.speak("NO no no no no! OK, your call!", "UK English Female");
     } else {
         responsiveVoice.speak("I am sorry, I didn't understand", "UK English Female");
     }
 }
 
-function recognizeCorrection(result){
-    console.log(result.text);
+function recognizeCorrection(result) {
+    response = result.text
+console.log(response);
+    if (betslip.err == 1 || betslip.err == 99) {
+        betslip.err = 0;
+        initialListen()
+    } else if (betslip.err == 2) {
+        var splitted = response.split(" ");
+        var amount = findAmount(splitted);
+        console.log(amount,splitted,response);
+        if (amount !== "" && amount > 0) {
+            betslip.bet.amount = amount;
+            betslip.err = 0;
+        } else {
+           sayAgain(betslip.err)
+        }
+    }
+
+    confirmBet()
 }
 
 function parseInput(text) {
