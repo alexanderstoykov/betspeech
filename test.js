@@ -68,7 +68,7 @@ var responseMessages = {
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
         showLoader();
         initialListen();
-    });
+    };
     //LISTENER -- END
 
     if (!!window.SpeechSDK) {
