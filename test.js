@@ -241,7 +241,7 @@ function getBetUrl(team, condition, amount) {
         }
     };
 
-    funtion initTextTospeech(){
+    function initTextTospeech(){
       responsiveVoice.setDefaultVoice("UK English Female");
 
     }
