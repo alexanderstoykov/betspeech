@@ -18,16 +18,15 @@ var responseMessages = {
     99: "Sorry, can you repeat, please?"
 };
 
+var playedIntro = false;
+
 document.addEventListener("DOMContentLoaded", function() {
     startRecognizeOnceAsyncButton = document.getElementById("start_mic");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
     regionKey = 'westeurope';
 
     responsiveVoice.setDefaultVoice("UK English Female");
-    responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?", "UK English Female", {
-        onstart: showSpeaking(),
-        onend: resetIcon(),
-    });
+    
 
     startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
     startRecognizeOnceAsyncButton.addEventListener("tap", startlisten);
@@ -63,7 +62,19 @@ document.addEventListener("DOMContentLoaded", function() {
         speechConfig.speechRecognitionLanguage = "en-US";
         var audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
         recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
-        initialListen();
+
+        if(!playedIntro){
+            responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?", "UK English Female", {
+                onstart: showSpeaking(),
+                onend: function(){ 
+                     playedIntro = true;
+                     initialListen(); 
+                     resetIcon(); 
+                 },
+            });
+        } else{
+            initialListen();
+        }
     };
     //LISTENER -- END
 
