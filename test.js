@@ -1,10 +1,5 @@
 // status fields and start button in UI
-var startRecognizeOnceAsyncButton;
-// subscription key and region key for speech services.
-var subscriptionKey, regionKey;
-var authorizationToken;
-var SpeechSDK;
-var recognizer;
+var startRecognizeOnceAsyncButton, subscriptionKey, regionKey, authorizationToken, SpeechSDK, recognizer;
 
 var betslip = {
     ready: false,
@@ -16,18 +11,13 @@ var betslip = {
     }
 };
 
-// var responseMessages = {
-//     0: "all good",
-//     1: "sorry, i couldnt understand the team you would like to bet on, please repeat",
-//     2: "how much would you like to bet",
-//     99: "Sorry, could not understand. try again."
-// };
 var responseMessages = {
     0: "all good",
     1: "What team?",
     2: "What amount?",
     99: "Sorry, can you repeat, please?"
 };
+
 document.addEventListener("DOMContentLoaded", function() {
     startRecognizeOnceAsyncButton = document.getElementById("start_mic");
     subscriptionKey = '2251de4451724f73b7fbe7730d151131';
@@ -35,7 +25,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     responsiveVoice.setDefaultVoice("UK English Female");
     // responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
-    responsiveVoice.speak("Welcome");
+    responsiveVoice.speak("Welcome", "UK English Female", {
+        onstart: showSpeaking(),
+        onend: resetIcon(),
+    });
 
     startRecognizeOnceAsyncButton.addEventListener("click", startlisten);
     startRecognizeOnceAsyncButton.addEventListener("tap", startlisten);
@@ -90,10 +83,10 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function initialListen(){
-    showLoader();
+    showListening();
     recognizer.recognizeOnceAsync(processInput,
         function (err) {
-            hideLoader()
+            resetIcon()
             startRecognizeOnceAsyncButton.disabled = false;
             alert(err)
             recognizer.close();
@@ -102,10 +95,9 @@ function initialListen(){
 }
 
 function processInput(result){
-    hideLoader();
+    resetIcon();
     parsed = parseInput(result.text)
     if (parsed.team != "") {
-        console.log(1);
         betslip.bet.team = parsed.team
     }
     if (parsed.amount != "" && parsed.amount > 0) {
@@ -124,12 +116,38 @@ function processInput(result){
 }
 
 function sayAgain(err){
-    hideLoader();
+    resetIcon();
     betslip.error = err
     responsiveVoice.speak(responseMessages[err], 'UK English Female', {
+        onstart: showSpeaking(),
         onend: function () {
-            showLoader();
-            recognizer.recognizeOnceAsync(parseCorrectionResponse, function (err) {
+            showListening();
+            recognizer.recognizeOnceAsync(function (result) {
+                resetIcon();
+                var response = '';
+                if(typeof result.text != 'undefined') {
+                    response = result.text.toLowerCase();
+                }
+
+                if (betslip.error == 1) {
+                    if (response[response.length - 1] === ".")
+                        response = response.slice(0, -1);
+                    response = response.replace(/\w\S*/g, function (txt) {
+                        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                    });
+                    betslip.bet.team = response;
+                } else if (betslip.error == 2) {
+                    var splitted = response.split(" ");
+                    var amount = findAmount(splitted);
+                    if (amount !== "" && amount > 0) {
+                        betslip.bet.amount = amount;
+                    } else {
+                        return sayAgain(betslip.error)
+                    }
+                }
+
+                return processInput({text:response});
+            }, function (err) {
                 alert(err+"bbb")
             })
         }
@@ -138,10 +156,53 @@ function sayAgain(err){
 
 function confirmBet(){
     betslip.error = 0
-    responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on team " + betslip.bet.team+"?", 'UK English Female', {
+    responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on " + betslip.bet.team+"?", 'UK English Female', {
+        onstart: showSpeaking(),
         onend: function () {
-            showLoader();
-            recognizer.recognizeOnceAsync(recognizeConfirmation, function (err) {
+            showListening();
+            recognizer.recognizeOnceAsync(function (result){
+                resetIcon();
+                var response = '';
+                if(typeof result.text != 'undefined') {
+                    response = result.text.toLowerCase();
+                }
+
+                if (response.indexOf("yes") !== -1 ||
+                    response.indexOf("i do") !== -1 ||
+                    response.indexOf("i am") !== -1) {
+                    var url = getBetUrl(betslip.bet.team, betslip.bet.condition, betslip.bet.amount)
+                    console.log(url, betslip);
+                    if (url == "") {
+                        closeSession();
+                        responsiveVoice.speak("I couldn't find this team in the list of upcoming games. Please try again.", "UK English Female", {
+                            onstart: showSpeaking(),
+                            onend: resetIcon(),
+                        });
+                    } else {
+                        closeSession();
+                        responsiveVoice.speak("Sure, I will place the bet for you!", "UK English Female", {
+                            onstart:showSpeaking(),
+                            onend: function () {
+                                window.location.replace(url)
+                            }
+                        });
+                    }
+
+                } else if (response.indexOf("no") !== -1 ||
+                    response.indexOf("i don't") !== -1 ||
+                    response.indexOf("i am not") !== -1){
+                    responsiveVoice.speak("OK, you can bet later. Bye!", "UK English Female", {
+                        onstart: showSpeaking(),
+                        onend: resetIcon(),
+                    });
+
+                } else {
+                    responsiveVoice.speak("I didn't understand your answer, please try again", "UK English Female", {
+                        onstart: showSpeaking(),
+                        onend: resetIcon(),
+                    });
+                }
+            }, function (err) {
                 alert(err+"aaa")
             })
         }
@@ -215,39 +276,6 @@ function getCondition(text) {
     return condition;
 }
 
-function recognizeConfirmation(result){
-    hideLoader();
-    var response = '';
-    if(typeof result.text != 'undefined') {
-        response = result.text.toLowerCase();
-    }
-
-    if (response.indexOf("yes") !== -1 ||
-        response.indexOf("i do") !== -1 ||
-        response.indexOf("i am") !== -1) {
-        var url = getBetUrl(betslip.bet.team, betslip.bet.condition, betslip.bet.amount)
-        closeSession()
-        if (url == "") {
-            responsiveVoice.speak("I couldn't find this team in the list of upcoming games. Please try again.", "UK English Female");
-        } else {
-            responsiveVoice.speak("Sure, I will place the bet for you!", "UK English Female", {
-                onend: function () {
-                    window.location.replace(url)
-                }
-            });
-        }
-
-    } else if (response.indexOf("no.") !== -1 ||
-        response.indexOf("i don't") !== -1 ||
-        response.indexOf("i am not") !== -1){
-        responsiveVoice.speak("OK, you can bet later. Bye!", "UK English Female");
-        closeSession()
-    } else {
-        responsiveVoice.speak("I didn't understand your answer, please try again", "UK English Female");
-        initialListen();
-    }
-}
-
 function closeSession(recognizer) {
     if (typeof recognizer != "undefined") {
         recognizer.close();
@@ -257,33 +285,6 @@ function closeSession(recognizer) {
     betslip.bet.team = "";
     betslip.bet.amount = "";
     betslip.bet.condition = "";
-}
-
-function parseCorrectionResponse(result) {
-    hideLoader();
-    var response = '';
-    if(typeof result.text != 'undefined') {
-        response = result.text.toLowerCase();
-    }
-
-    if (betslip.error == 1) {
-        if (response[response.length - 1] === ".")
-            response = response.slice(0, -1);
-        response = response.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-        betslip.bet.team = response;
-    } else if (betslip.error == 2) {
-        var splitted = response.split(" ");
-        var amount = findAmount(splitted);
-        if (amount !== "" && amount > 0) {
-            betslip.bet.amount = amount;
-        } else {
-            return sayAgain(betslip.error)
-        }
-    }
-
-    return processInput({text:response});
 }
 
 function parseInput(text) {
@@ -373,12 +374,17 @@ function getBetUrl(team, condition, amount) {
     return return_url;
 }
 
-function showLoader() {
-    document.getElementById("spinner").style.display = 'block';
-    document.getElementById("icon").className = "fa fa-stop-circle rec_btn_active";
+function showListening() {
+    document.getElementById("betty-icon").className = "fa fa-microphone-alt talking-mic rec_btn_inactive";
+    document.getElementById("start_mic").className = "dy_sticker dybounceIn clicked";
 }
 
-function hideLoader() {
-    document.getElementById("spinner").style.display = 'none';
-    document.getElementById("icon").className = "fa fa-microphone rec_btn_inactive";
+function resetIcon() {
+    document.getElementById("betty-icon").className = "fa fa-microphone rec_btn_inactive";
+    document.getElementById("start_mic").className = "dy_sticker dybounceIn";
+}
+
+function showSpeaking(){
+    document.getElementById("betty-icon").className = "fa fa-volume-up talking-mic rec_btn_inactive";
+    document.getElementById("start_mic").className = "dy_sticker dybounceIn clicked";
 }
