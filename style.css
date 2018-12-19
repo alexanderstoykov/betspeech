@@ -1,11 +1,62 @@
-#rec_btn_id {
-	width: 210px;
+
+#voiceresult{
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border: 1px solid red;
+  top: 20px;
+  padding: 20px 20px;
+  background: #eee;
+  z-index: 1000000;
+}
+
+#spinner {
+			width: 40px;
+			height: 40px;
+			background-color: #e61515;
+			margin: -46px auto;
+			margin-left: 100px;
+            -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+            animation: sk-rotateplane 1.2s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes sk-rotateplane {
+            0% { -webkit-transform: perspective(120px) }
+            50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+            100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+        }
+
+        @keyframes sk-rotateplane {
+            0% {
+                transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+                -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+            } 50% {
+                  transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+                  -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+              } 100% {
+                    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+                    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+                }
+        }
+
+#icon  {
+  display: inline-block; 
+  width: 50px;
+}
+#text_btn {
+  display: inline-block; 
+  width: 150 px;
+}
+#start_mic {
+	width: 200px;
     height: 70px;
-	text-align: right;
-	border-radius: 5px;
-	outline: none;
-	border-style: none;
-	padding-left: 5px;
+    border-radius: 5px;
+    outline: none;
+    background: #6cc34a26;
+    padding-top: 20px;
+    padding-left: 40px;
+    display: block;
+    border: 1px solid grey;
 }
 
 .rec_btn_inactive:before, .rec_btn_active:before {
@@ -17,7 +68,7 @@
 }
 
 .rec_btn_inactive:before{
-	padding-right:8px;
+  width: 40px;
 }
 
 .rec_btn_active:before {
@@ -26,8 +77,8 @@
 
 .rec_btn_text{
 	font-family: Tahoma,Arial,Helvetica,sans-serif;
-	padding-right: 10px;
-	padding-left: 15px;
+	
+	padding-left: 5px;
 }
 
 .main_div {

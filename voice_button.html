@@ -2,30 +2,37 @@
 <header>
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://chat-bot.0config.eu/pr1/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+	<script src="https://chat-bot.0config.eu/betspeech/test.js"></script>
+	<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 </header>
 <body>
 	<div class="main_div"> 
 		
-		<button id="rec_btn_id" class="fa fa-microphone rec_btn_inactive">
-		
-		<span class="rec_btn_text">VOICE BETTING</span>
+		<div id="start_mic">
+		  <span id="icon" class="fa fa-microphone rec_btn_inactive"></span>
+		  <span id="text_btn" class="rec_btn_text">VOICE BETTING</span>	
+		  <span id="spinner" style="display: none;"></span>
+	  </div>	
 		
 	</button>		
 
 	</div>
 <body>
 <script>
-
-var rec_btn = document.getElementById("rec_btn_id"); 
+var rec_btn = document.getElementById("start_mic"); 
 rec_btn.onclick = function() {
-	if (rec_btn.className == "fa fa-microphone rec_btn_inactive"){
-		rec_btn.className = "fa fa-stop-circle rec_btn_active";
+	icon = document.getElementById("icon")
+	if (icon.className == "fa fa-microphone rec_btn_inactive"){
+		icon.className = "fa fa-stop-circle rec_btn_active";
+		document.getElementById("text_btn").innerHTML="";
+		showLoader();
 		
 	} else {
-		rec_btn.className = "fa fa-microphone rec_btn_inactive";
+		hideLoader();
+		icon.className = "fa fa-microphone rec_btn_inactive";
+		document.getElementById("text_btn").innerHTML="VOICE BETTING";
 	}
-
 };
-
 </script>
 </html>
