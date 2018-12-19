@@ -95,6 +95,7 @@ function initialListen(){
 }
 
 function processInput(result){
+    console.log("You said: ",result.text);
     resetIcon();
     parsed = parseInput(result.text)
     if (parsed.team != "") {
@@ -103,9 +104,10 @@ function processInput(result){
     if (parsed.amount != "" && parsed.amount > 0) {
         betslip.bet.amount = parsed.amount
     }
-    if (parsed.condition != "") {
+    if (betslip.bet.condition == ""){
         betslip.bet.condition = parsed.condition
     }
+
     var err = validateResponse(betslip.bet);
 
     if (err == 0) {
@@ -156,7 +158,8 @@ function sayAgain(err){
 
 function confirmBet(){
     betslip.error = 0
-    responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on " + betslip.bet.team+"?", 'UK English Female', {
+    console.log("Betslip:", betslip);
+    responsiveVoice.speak("Are you sure you want to bet " + betslip.bet.amount + " on " + betslip.bet.team+" to "+betslip.bet.condition+"?", 'UK English Female', {
         onstart: showSpeaking(),
         onend: function () {
             showListening();
@@ -191,6 +194,7 @@ function confirmBet(){
                 } else if (response.indexOf("no") !== -1 ||
                     response.indexOf("i don't") !== -1 ||
                     response.indexOf("i am not") !== -1){
+                    closeSession();
                     responsiveVoice.speak("OK, you can bet later. Bye!", "UK English Female", {
                         onstart: showSpeaking(),
                         onend: resetIcon(),
