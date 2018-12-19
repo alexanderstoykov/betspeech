@@ -230,8 +230,11 @@ function recognizeConfirmation(result){
         if (url == "") {
             responsiveVoice.speak("I couldn't find this team in the list of upcoming games. Please try again.", "UK English Female");
         } else {
-            window.location.replace(url)
-            responsiveVoice.speak("Sure, I will place the bet for you!", "UK English Female");
+            responsiveVoice.speak("Sure, I will place the bet for you!", "UK English Female", {
+                onend: function () {
+                    window.location.replace(url)
+                }
+            });
         }
 
     } else if (response.indexOf("no.") !== -1 ||
