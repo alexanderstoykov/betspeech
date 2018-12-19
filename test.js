@@ -97,6 +97,12 @@ function initialListen(){
 function processInput(result){
     console.log("You said: ",result.text);
     resetIcon();
+
+    if(checkListGames(result.text)){
+        listGames();
+        return;
+    }
+    
     parsed = parseInput(result.text)
     if (parsed.team != "") {
         betslip.bet.team = parsed.team
@@ -391,4 +397,33 @@ function resetIcon() {
 function showSpeaking(){
     document.getElementById("betty-icon").className = "fa fa-volume-up talking-mic rec_btn_inactive";
     document.getElementById("start_mic").className = "dy_sticker dybounceIn clicked";
+}
+
+function checkListGames(text){
+    foundList = false;
+    if (typeof text != 'undefined') {
+        
+        if (text.toLowerCase().indexOf("list") !== -1) {
+            return true;
+        } else if (text.toLowerCase().indexOf("games") !== -1) {
+            return true;
+        }
+    }
+    return foundList;
+}
+
+function listGames(){
+    var list = "Wolves vs Liverpool. Home 6.4,  Draw 4.2, Away 1.54 .";
+    list += "Arsenal vs Burnley.  Home 1.2, Draw 6.2, Away 14.2 .";
+    list += "Bournemouth vs Brighton,  Home 1.9,  Draw 3.5, Away 4.2 .";
+    list += "Choose your bet, for example: Bet 20 on Liverpool to win."
+
+    responsiveVoice.speak(list, "UK English Female", {
+        onstart:showSpeaking(),
+        onend: function () {
+                resetIcon();
+                initialListen();
+        }
+    });
+    
 }
