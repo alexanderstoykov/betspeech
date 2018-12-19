@@ -67,9 +67,9 @@ document.addEventListener("DOMContentLoaded", function() {
             responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?", "UK English Female", {
                 onstart: showSpeaking(),
                 onend: function(){ 
+                     resetIcon();
                      playedIntro = true;
                      initialListen(); 
-                     resetIcon(); 
                  },
             });
         } else{
