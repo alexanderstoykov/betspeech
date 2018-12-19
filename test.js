@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     regionKey = 'westeurope';
 
     responsiveVoice.setDefaultVoice("UK English Female");
-    // responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?");
-    responsiveVoice.speak("Welcome", "UK English Female", {
+    responsiveVoice.speak("Welcome to Mansion Bet, My name is Betty, your betting voice host, what would you like to bet on?", "UK English Female", {
         onstart: showSpeaking(),
         onend: resetIcon(),
     });
