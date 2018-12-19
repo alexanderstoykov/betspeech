@@ -413,7 +413,7 @@ function checkListGames(text){
 }
 
 function listGames(){
-    var list = "Wolves vs Liverpool. Home 6.4,  Draw 4.2, Away 1.54 .";
+    var list = "Here are the games:      Wolves vs Liverpool. Home 6.4,  Draw 4.2, Away 1.54 .";
     list += "Arsenal vs Burnley.  Home 1.2, Draw 6.2, Away 14.2 .";
     list += "Bournemouth vs Brighton,  Home 1.9,  Draw 3.5, Away 4.2 .";
     list += "Choose your bet, for example: Bet 20 on Liverpool to win."
