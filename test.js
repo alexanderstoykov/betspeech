@@ -114,7 +114,6 @@ function processInput(result){
     if (parsed.condition != "") {
         betslip.bet.condition = parsed.condition
     }
-    console.log(parsed, betslip);
     var err = validateResponse(betslip.bet);
 
     if (err == 0) {
@@ -126,7 +125,6 @@ function processInput(result){
 
 function sayAgain(err){
     hideLoader();
-    console.log('Say again');
     betslip.error = err
     responsiveVoice.speak(responseMessages[err], 'UK English Female', {
         onend: function () {
@@ -227,15 +225,35 @@ function recognizeConfirmation(result){
     if (response.indexOf("yes") !== -1 ||
         response.indexOf("i do") !== -1 ||
         response.indexOf("i am") !== -1) {
-        responsiveVoice.speak("So you want , huh? I am now gonna place the bet for you!", "UK English Female");
-    } else if (response.indexOf("no") !== -1 ||
+        var url = getBetUrl(betslip.bet.team, betslip.bet.condition, betslip.bet.amount)
+        closeSession()
+        if (url == "") {
+            responsiveVoice.speak("I couldn't find this team in the list of upcoming games. Please try again.", "UK English Female");
+        } else {
+            window.location.replace(url)
+            responsiveVoice.speak("Sure, I will place the bet for you!", "UK English Female");
+        }
+
+    } else if (response.indexOf("no.") !== -1 ||
         response.indexOf("i don't") !== -1 ||
         response.indexOf("i am not") !== -1){
-        responsiveVoice.speak("NO no! OK, your call!", "UK English Female");
+        responsiveVoice.speak("OK, you can bet later. Bye!", "UK English Female");
+        closeSession()
     } else {
-        responsiveVoice.speak("Response is neither yes or no", "UK English Female");
+        responsiveVoice.speak("I didn't understand your answer, please try again", "UK English Female");
         initialListen();
     }
+}
+
+function closeSession(recognizer) {
+    if (typeof recognizer != "undefined") {
+        recognizer.close();
+        recognizer = undefined;
+    }
+    betslip.error = 0;
+    betslip.bet.team = "";
+    betslip.bet.amount = "";
+    betslip.bet.condition = "";
 }
 
 function parseCorrectionResponse(result) {
@@ -246,7 +264,12 @@ function parseCorrectionResponse(result) {
     }
 
     if (betslip.error == 1) {
-        betslip.bet.team = response
+        if (response[response.length - 1] === ".")
+            response = response.slice(0, -1);
+        response = response.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+        betslip.bet.team = response;
     } else if (betslip.error == 2) {
         var splitted = response.split(" ");
         var amount = findAmount(splitted);
@@ -339,14 +362,20 @@ function getBetUrl(team, condition, amount) {
         }
     };
 
+    if (typeof return_url == "undefined"){
+        return "";
+    }
+
     return_url = return_url.concat("&Stake=", amount)
     return return_url;
 }
 
 function showLoader() {
     document.getElementById("spinner").style.display = 'block';
+    document.getElementById("icon").className = "fa fa-stop-circle rec_btn_active";
 }
 
 function hideLoader() {
     document.getElementById("spinner").style.display = 'none';
+    document.getElementById("icon").className = "fa fa-microphone rec_btn_inactive";
 }

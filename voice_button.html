@@ -19,20 +19,4 @@
 
 	</div>
 <body>
-<script>
-var rec_btn = document.getElementById("start_mic"); 
-rec_btn.onclick = function() {
-	icon = document.getElementById("icon")
-	if (icon.className == "fa fa-microphone rec_btn_inactive"){
-		icon.className = "fa fa-stop-circle rec_btn_active";
-		document.getElementById("text_btn").innerHTML="";
-		showLoader();
-		
-	} else {
-		hideLoader();
-		icon.className = "fa fa-microphone rec_btn_inactive";
-		document.getElementById("text_btn").innerHTML="VOICE BETTING";
-	}
-};
-</script>
 </html>
